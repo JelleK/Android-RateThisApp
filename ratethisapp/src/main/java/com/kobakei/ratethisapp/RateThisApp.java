@@ -100,6 +100,24 @@ public class RateThisApp {
 
         printStatus(context);
     }
+    
+    public static void rate(Context context) {
+		String appPackage = context.getPackageName();
+		Intent intent;
+		try {
+			intent = new Intent(Intent.ACTION_VIEW);
+			intent.setData(Uri.parse("market://details?id=" + appPackage));
+			context.startActivity(intent);
+		} catch (Exception e) {
+			intent = new Intent(Intent.ACTION_VIEW);
+			intent.setData(Uri
+					.parse("http://play.google.com/store/apps/details?id="
+							+ appPackage));
+			context.startActivity(intent);
+
+		}
+		setOptOut(context, true);
+	}
 
     /**
      * Show the rate dialog if the criteria is satisfied.
@@ -184,10 +202,7 @@ public class RateThisApp {
                 if (sCallback != null) {
                     sCallback.onYesClicked();
                 }
-                String appPackage = context.getPackageName();
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackage));
-                context.startActivity(intent);
-                setOptOut(context, true);
+                rate(context);
             }
         });
         builder.setNeutralButton(cancelButtonID, new OnClickListener() {
